@@ -9,7 +9,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.2.45"
+    "@vitejs/plugin-legacy": "^4.0.2",
+    "axios": "^1.3.4",
+    "less": "^4.1.3",
+    "less-loader": "^11.1.0",
+    "naive-ui": "^2.34.3",
+    "normalize.css": "^8.0.1",
+    "pinia": "^2.0.33",
+    "unplugin-auto-import": "^0.15.2",
+    "unplugin-vue-components": "^0.24.1",
+    "vfonts": "^0.0.3",
+    "vite-plugin-style-import": "^2.0.0",
+    "vue": "^3.2.45",
+    "vue-router": "4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
