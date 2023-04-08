@@ -62,13 +62,6 @@ public class EmployeeController {
         log.info("员工信息"+employee.toString());
 //        初始化加密MD5密码
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
-//        处理时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-//        处理创建人和修改人
-        Long userId = (Long) request.getSession().getAttribute("employee"); // 拿到当前用户id
-        employee.setCreateUser(userId);
-        employee.setUpdateUser(userId);
         System.out.println(employee);
         employeeService.save(employee);
         return  R.success("新增员工成功");
@@ -98,9 +91,6 @@ public class EmployeeController {
 
     @PutMapping
     public R<String> changeStatus(HttpServletRequest request,@RequestBody Employee employee){
-        Long empId =(Long) request.getSession().getAttribute("employee");
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(empId);
         boolean res =  employeeService.updateById(employee);
         if (!res) return  R.error("更新失败。。。");
         return  R.success("员工修改状态成功！");

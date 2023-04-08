@@ -1,6 +1,7 @@
 package com.yukiice.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.yukiice.common.BaseContext;
 import com.yukiice.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -49,14 +50,15 @@ public class LoginCheckFilter implements Filter {
 //        判断登录状态
         if (request.getSession().getAttribute("employee") != null){
             log.info("用户已经登录了，用户的id为：{}",request.getSession().getAttribute("employee"));
+            Long empId =(Long) request.getSession().getAttribute("employee");
+            BaseContext.setCurrentId(empId); // 存储当前线程的用户id
             filterChain.doFilter(request,response);
             return;
         }
         filterChain.doFilter(request,response);
-        return;
 //        如果为登录则返回未登录结果，通过输出流方式，向客户端页面响应数据
-//        response.getWriter().write(JSON.toJSONString(R.error("您未登录")));
-//        log.info("拦截到请求：{}",request.getRequestURI());
+        response.getWriter().write(JSON.toJSONString(R.error("您未登录")));
+        log.info("拦截到请求：{}",request.getRequestURI());
     }
 
 //    判断是否在安全名单中
