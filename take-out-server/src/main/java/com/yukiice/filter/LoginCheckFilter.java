@@ -36,7 +36,8 @@ public class LoginCheckFilter implements Filter {
                 "/employee/login",
                 "/employee/logout",
                 "/backend/**",
-                "/front/**"
+                "/front/**",
+                "/upload"
         };
         boolean check =  checkUrl(urls,requestURI);
 
