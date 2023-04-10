@@ -52,6 +52,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "pnpm",
+    "ts.external.directory.path": "/Users/yukiice/Documents/Github/tack-out/take-out-admin/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -63,7 +64,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1680918006283</updated>
-      <workItem from="1680918010722" duration="3329000" />
+      <workItem from="1680918010722" duration="3582000" />
     </task>
     <servers />
   </component>

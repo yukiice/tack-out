@@ -58,7 +58,7 @@ public class EmployeeController {
 
 //    新增员工
     @PostMapping
-    public R<String> save(HttpServletRequest request,@RequestBody Employee employee){
+    public R<String> save(@RequestBody Employee employee){
         log.info("员工信息"+employee.toString());
 //        初始化加密MD5密码
         employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
