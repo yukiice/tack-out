@@ -44,7 +44,7 @@ public class DishFlavorController {
         Page<DishDto> dishDtoPage = new Page<>();
         LambdaQueryWrapper<Dish> queryWrapper =  new LambdaQueryWrapper<>();
         queryWrapper.orderByAsc(Dish::getUpdateTime);
-        dishService.page(pageInfo);
+        dishService.page(pageInfo,queryWrapper);
 //        执行对象拷贝
         BeanUtils.copyProperties(pageInfo,dishDtoPage,"records");
         List<Dish> records = pageInfo.getRecords();
@@ -87,5 +87,16 @@ public class DishFlavorController {
     public R<String> edit(@RequestBody DishDto dishDto){
         dishService.updateWithFlavor(dishDto);
         return  R.success("修改成功");
+    }
+
+    @GetMapping("/list")
+    public R<List<Dish>> list(Dish dish){
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(dish.getCategoryId() != null,Dish::getCategoryId,dish.getCategoryId());
+//        筛选状态为起售的菜品
+        queryWrapper.eq(Dish::getStatus,1);
+        queryWrapper.orderByDesc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
+        List<Dish> list = dishService.list(queryWrapper);
+        return R.success(list);
     }
 }
