@@ -2,12 +2,15 @@ package com.yukiice.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yukiice.common.CustomException;
 import com.yukiice.dto.DishDto;
 import com.yukiice.entity.Dish;
 import com.yukiice.entity.DishFlavor;
+import com.yukiice.entity.SetmealDish;
 import com.yukiice.mapper.DishMapper;
 import com.yukiice.service.DishFlavorService;
 import com.yukiice.service.DishService;
+import com.yukiice.service.SetmealDishService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,12 @@ import java.util.stream.Collectors;
 public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements DishService {
     @Autowired
     DishFlavorService dishFlavorService;
+
+    @Autowired
+    DishService dishService;
+
+    @Autowired
+    SetmealDishService setmealDishService;
     @Override
     public void saveWithFlavor(DishDto dishDto) {
 //        保存基本信息到菜品表dish
@@ -77,5 +86,47 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
             return  item;
         }).collect(Collectors.toList());
         dishFlavorService.saveBatch(flavors);
+    }
+
+    @Override
+    public void deleteByList(List<Long> ids) {
+        ids.stream().map((item)->{
+            LambdaQueryWrapper<Dish> queryWrapperOne = new LambdaQueryWrapper<>();
+            queryWrapperOne.in(Dish::getId,item);
+            queryWrapperOne.eq(Dish::getStatus,1);
+            int count = this.count(queryWrapperOne);
+            if (count != 0){
+                throw new CustomException("该菜品起售中或不存在，无法删除");
+            }
+            LambdaQueryWrapper<SetmealDish> queryWrapperTwo = new LambdaQueryWrapper<>();
+            queryWrapperTwo.in(SetmealDish::getDishId,item);
+            int countTwo =  setmealDishService.count(queryWrapperTwo);
+            if (countTwo > 0){
+                throw new CustomException("该菜品已关联了套餐，无法删除");
+            }
+            return  item;
+        }).collect(Collectors.toList());
+        this.removeByIds(ids);
+    }
+
+    @Override
+    public void updateStatusById(List<Long> ids, int status) {
+        ids.stream().map((item)->{
+//            判断是否存在该菜品
+            Dish dish = this.getById(item);
+            if (dish == null){
+                throw new CustomException("该菜品不存在！");
+            }
+//            判断是否与套餐相关联
+            LambdaQueryWrapper<SetmealDish> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.in(SetmealDish::getDishId,item);
+            int count = setmealDishService.count(queryWrapper);
+            if (count > 0){
+                throw new CustomException("该菜品目前有关联的套餐！");
+            }
+            dish.setStatus(status);
+            this.updateById(dish);
+            return  item;
+        }).collect(Collectors.toList());
     }
 }
