@@ -1,6 +1,10 @@
 server:
   port: 4005
 spring:
+  mail:
+    host: smtp.163.com
+    username: javatestyukiice@163.com
+    password: IXQADHCOAZKVCVTX
   application:
     name: reggie_take_out
   datasource:
