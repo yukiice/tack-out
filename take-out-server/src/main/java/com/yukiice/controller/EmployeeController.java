@@ -44,7 +44,7 @@ public class EmployeeController {
 //        5.查询员工状态
         if (emp.getStatus() == 0) return R.error("该员工账号已被冻结");
 //        6.登录成功，返回员工信息
-        request.getSession().setAttribute("employee",emp.getId());
+        request.getSession().setAttribute("user",emp.getId());
         System.out.println(emp.getId()+"????");
         return  R.success(emp);
     }
@@ -52,7 +52,7 @@ public class EmployeeController {
 //    退出
     @PostMapping("/logout")
     public R<String> logout(HttpServletRequest request){
-        request.getSession().removeAttribute("employee");
+        request.getSession().removeAttribute("user");
         return R.success("退出成功!");
     }
 

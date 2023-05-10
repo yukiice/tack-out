@@ -105,4 +105,13 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
 //        查询分类表
         return setmealDto;
     }
+
+    @Override
+    public List<Setmeal> getListByCategoryId(Long categoryId,int status) {
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(categoryId != null,Setmeal::getCategoryId,categoryId);
+        queryWrapper.eq(Setmeal::getStatus,1);
+        queryWrapper.orderByDesc(Setmeal::getUpdateTime);
+        return setmealService.list(queryWrapper);
+    }
 }

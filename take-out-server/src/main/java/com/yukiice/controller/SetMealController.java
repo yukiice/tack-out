@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,5 +103,14 @@ public class SetMealController {
     public R<SetmealDto> detail(@PathVariable Long id){
         SetmealDto setmealDto = setmealService.getByIdWithDish(id);
         return  R.success(setmealDto);
+    }
+    @GetMapping("/list")
+    public R<List<Setmeal>> getList(@RequestParam Long categoryId,@RequestParam int status){
+        return R.success(setmealService.getListByCategoryId(categoryId,status));
+    }
+
+    @GetMapping("/dish/{id}")
+    public R<SetmealDto> getOneInCart(@PathVariable Long id){
+        return  null;
     }
 }

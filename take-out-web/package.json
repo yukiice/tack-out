@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@antv/g2plot": "^2.4.29",
     "@types/node": "^18.15.11",
     "@vitejs/plugin-vue-jsx": "^3.0.1",
     "@vueuse/core": "^9.13.0",
