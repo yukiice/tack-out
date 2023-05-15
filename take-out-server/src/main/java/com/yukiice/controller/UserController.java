@@ -4,9 +4,15 @@ import com.yukiice.common.R;
 import com.yukiice.dto.CodeDto;
 import com.yukiice.entity.User;
 import com.yukiice.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author yukiice
@@ -26,16 +33,27 @@ import java.util.Random;
 @RestController
 @Slf4j
 @RequestMapping("/user")
+@Api(tags = "用户相关接口")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @Resource
     JavaMailSender sender;
+    @Autowired
+    private StringRedisTemplate template;
 
     @Value("${spring.mail.username}")
     String from;
+
+    /**
+     *
+     * @param request
+     * @param user
+     * @return
+     */
     @PostMapping("/sendMsg")
+    @ApiOperation(value = "验证码接口")
     public R<String> sendMsg(HttpServletRequest request, @RequestBody User user){
         if (user.getPhone().isEmpty()) return R.error("请填入相应的邮箱号");
         if (!userService.checkUser(request,user.getPhone())) return R.error("用户不存在");
@@ -54,7 +72,8 @@ public class UserController {
         //OK，万事俱备只欠发送
         sender.send(message);
         log.info("用户为:{}",user);
-        request.getSession().setAttribute("emailCode",String.valueOf(code));
+//        验证码缓存到redis中，时间为5min
+        template.opsForValue().set(user.getPhone(), String.valueOf(code),5, TimeUnit.MINUTES);
         return  R.success("验证码发送成功");
     }
     @PostMapping(value = "/login")

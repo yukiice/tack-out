@@ -14,10 +14,12 @@ import com.yukiice.service.SetmealDishService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +39,9 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
 
     @Autowired
     SetmealDishService setmealDishService;
+
+    @Autowired
+    RedisTemplate<Object,Object> redisTemplate;
     @Override
     public void saveWithFlavor(DishDto dishDto) {
 //        保存基本信息到菜品表dish
@@ -73,6 +78,10 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
      */
     @Override
     public void updateWithFlavor(DishDto dishDto) {
+
+        Set<Object> keys = redisTemplate.keys("dish_*");
+        log.info("拿到的keys为:{}",keys);
+
 //        更新dish表
         this.updateById(dishDto);
 //        清理原有的口味数据

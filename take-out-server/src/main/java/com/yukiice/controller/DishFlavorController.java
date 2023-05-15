@@ -12,9 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -32,6 +35,9 @@ public class DishFlavorController {
 
     @Autowired
     CategoryService categoryService;
+
+    @Autowired
+    RedisTemplate<Object,Object> redisTemplate;
 
     /**
      * 获取分页数据
@@ -61,7 +67,6 @@ public class DishFlavorController {
         dishDtoPage.setRecords(list);
         return R.success(dishDtoPage);
     }
-
     /**
      * 新增菜品操作
      * @param dishDto
@@ -103,13 +108,21 @@ public class DishFlavorController {
      */
     @GetMapping("/list")
     public R<List<Dish>> list(Dish dish){
+        List<Dish> dishList = null;
+        String redisKey = "dish_"+dish.getCategoryId()+"_"+dish.getStatus();
+        log.info("rediskey:{}",redisKey);
+        dishList = (List<Dish>) redisTemplate.opsForValue().get(redisKey);
+        if (dishList != null){
+            return R.success(dishList);
+        }
         LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(dish.getCategoryId() != null,Dish::getCategoryId,dish.getCategoryId());
 //        筛选状态为起售的菜品
         queryWrapper.eq(Dish::getStatus,1);
         queryWrapper.orderByDesc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
-        List<Dish> list = dishService.list(queryWrapper);
-        return R.success(list);
+        dishList = dishService.list(queryWrapper);
+        redisTemplate.opsForValue().set(redisKey,dishList,10, TimeUnit.MINUTES);
+        return R.success(dishList);
     }
 
     /**

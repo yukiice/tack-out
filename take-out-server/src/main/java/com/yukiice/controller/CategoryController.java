@@ -3,10 +3,12 @@ package com.yukiice.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yukiice.common.R;
+import com.yukiice.dto.DishDto;
 import com.yukiice.entity.Category;
 import com.yukiice.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     CategoryService categoryService;
+
 
     /**
      * 根据分页获取数据
@@ -71,7 +74,6 @@ public class CategoryController {
 
     @GetMapping("/list")
     public R<List<Category>> list(Category category){
-        log.info("类型为:{}",category.getType());
         LambdaQueryWrapper<Category>  queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(category.getType() != null,Category::getType,category.getType());
         queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);

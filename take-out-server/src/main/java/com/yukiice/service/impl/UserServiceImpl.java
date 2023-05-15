@@ -9,6 +9,8 @@ import com.yukiice.mapper.UserMapper;
 import com.yukiice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     UserService userService;
 
+    @Autowired
+    StringRedisTemplate template;
+
     @Override
     public boolean checkUser(HttpServletRequest request,String name) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
@@ -33,18 +38,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
        if (user == null){
            throw  new CustomException("该用户不存在！");
        }
-        request.getSession().setAttribute("user",user.getId());
         return true;
     }
 
     @Override
     public boolean checkCode(HttpServletRequest request, CodeDto codeDto) {
-        System.out.println(request.getSession().getAttribute("emailCode"));
-        System.out.println(codeDto.getCode());
-        if (request.getSession().getAttribute("emailCode") == null){
+        //       redis中获取验证码
+        Object codeIn =  template.opsForValue().get(codeDto.getPhone());
+        if (codeIn == null){
             throw  new CustomException("验证码失效！");
         }
-        if (!Objects.equals(codeDto.getCode(), request.getSession().getAttribute("emailCode"))) {
+        if (!Objects.equals(codeDto.getCode(), codeIn)) {
             throw  new CustomException("验证码不正确！");
         }
         return  true;

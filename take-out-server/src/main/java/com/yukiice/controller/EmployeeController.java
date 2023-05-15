@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,9 @@ import java.time.LocalDateTime;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    StringRedisTemplate template;
 
     /**
      *员工登录模块
@@ -44,8 +49,9 @@ public class EmployeeController {
 //        5.查询员工状态
         if (emp.getStatus() == 0) return R.error("该员工账号已被冻结");
 //        6.登录成功，返回员工信息
+        log.info("拿到的id为:{}",emp.getId());
+        template.opsForValue().set(String.valueOf(emp.getId()),String.valueOf(emp.getId()));
         request.getSession().setAttribute("user",emp.getId());
-        System.out.println(emp.getId()+"????");
         return  R.success(emp);
     }
 

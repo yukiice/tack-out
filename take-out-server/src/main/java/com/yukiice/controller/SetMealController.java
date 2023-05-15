@@ -35,6 +35,13 @@ public class SetMealController {
     @Autowired
     CategoryService categoryService;
 
+    /**
+     * 查看分类菜品数据
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
     @GetMapping("/page")
     public R<Page<SetmealDto>> list(int page, int pageSize,String name){
         log.info("name：{}",name);

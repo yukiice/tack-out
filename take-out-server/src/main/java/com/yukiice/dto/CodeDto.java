@@ -10,5 +10,6 @@ import lombok.Data;
  */
 @Data
 public class CodeDto extends User {
+    private String phone;
     private String code;
 }

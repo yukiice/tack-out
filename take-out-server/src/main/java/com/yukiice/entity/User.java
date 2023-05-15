@@ -1,5 +1,6 @@
 package com.yukiice.entity;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * Create by 2023/4/14 16:00
  */
 @Data
+@ApiModel("用户")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
