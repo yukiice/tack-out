@@ -1,0 +1,131 @@
+.home {
+  background-color: #fff;
+}
+.home .bottom-btn {
+  background: linear-gradient(180deg, #1faf7f, #3fcb92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 85vw;
+  margin: 4vh auto;
+  padding: 1.5vh 0;
+  color: #fff;
+}
+.home .forms {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.home .forms div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-top: 2.5vh;
+}
+.home .forms div span:nth-child(1) {
+  display: block;
+  width: 40vw;
+  text-align: right;
+  color: #888;
+}
+.home .forms div span:nth-child(2) {
+  margin-left: 4vw;
+}
+.home .tops {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+.home .tops div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home .tops img {
+  width: 30px;
+  height: auto;
+}
+.home .top-card {
+  margin: 2vh auto;
+  width: 80vw;
+  padding: 4vw;
+  color: #fff;
+  border-radius: 0.16rem;
+  background: linear-gradient(180deg, #1faf7f, #3fcb92);
+  box-shadow: 0 0.107rem 0.213rem rgba(63, 203, 146, 0.4);
+}
+.home .top-card .school {
+  margin-top: 4vh;
+}
+.home .top-card .school .lefts {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.home .top-card .school .lefts div:nth-child(1) {
+  font-size: 16px;
+  font-weight: bold;
+}
+.home .top-card .school .lefts div:nth-child(2) {
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #1ca36e;
+  border-radius: 20px;
+  padding: 2px 5px;
+}
+.home .top-card .school .rights {
+  margin-top: 0.5vh;
+}
+.home .top-card .school .rights span {
+  font-size: 13px;
+}
+.home .top-card .school .rights span:nth-child(2) {
+  margin-left: 1vw;
+}
+.home .top-card .school .rights span:nth-child(3) {
+  margin-left: 1vw;
+}
+.home .top-card .messages {
+  display: flex;
+  align-items: center;
+}
+.home .top-card .messages .lefts {
+  display: flex;
+  align-items: center;
+}
+.home .top-card .messages .lefts div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.home .top-card .messages .lefts div:nth-child(2) {
+  margin-left: 2vw;
+}
+.home .top-card .messages .lefts div img {
+  width: 45px;
+  height: 60px;
+}
+.home .top-card .messages .lefts div span {
+  font-size: 12px;
+  color: #fff;
+  margin-top: 1vh;
+}
+.home .top-card .messages .rights {
+  margin-left: 3vw;
+  margin-top: -3vh;
+}
+.home .top-card .messages .rights div:nth-child(1) {
+  font-size: 16px;
+  font-weight: bold;
+}
+.home .top-card .messages .rights div:nth-child(2) {
+  font-size: 12px;
+  color: #fff;
+  margin-top: 1vh;
+}
+.home .top-card .messages .rights div:nth-child(2) span:nth-child(2) {
+  margin-left: 1vw;
+}
